@@ -1,0 +1,29 @@
+//dang ky tai khoan
+POST http://localhost:3001/api/auth/register
+Content-Type: application/json
+
+{
+    "name": "kinglata04",
+    "password": "123456",
+    "email": "king@gmail.com",
+    "role": "user"
+}
+
+###
+//dang nhap tai khoan
+POST http://localhost:3001/api/auth/login
+Content-Type: application/json
+
+{
+   "password": "123456",
+    "email": "king@gmail.com"
+}
+
+###
+//lay thong tin nguoi dung
+GET http://localhost:3001/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmVlZjE5NzI3YmFmZTA4ZTMzZTNiMyIsImlhdCI6MTc2NDg2NTE3NCwiZXhwIjoxNzY0ODY2MDc0fQ.Vt-iSJpqwZhhqfsuHAKLlu5GU8IIkdhQ9qcJLE-d9Uw
+###
+//logout
+POST http://localhost:3001/api/auth/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmVlZjE5NzI3YmFmZTA4ZTMzZTNiMyIsImlhdCI6MTc2NDY4NDg4MywiZXhwIjoxNzY0NzcxMjgzfQ.KfKRvF9FwonhGtsbRpMxCXsR685-M5iiSXQJ1CUxcOo
