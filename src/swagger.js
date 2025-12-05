@@ -1,7 +1,8 @@
 // swagger.js
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-
+import dotenv from "dotenv";
+dotenv.config();
 const options = {
   definition: {
     openapi: "3.0.0",

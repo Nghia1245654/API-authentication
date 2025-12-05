@@ -158,6 +158,13 @@ router.get('/me', protect, getMe);
  *     summary: Đăng xuất người dùng (xóa refresh token cookie)
  *     security:
  *       - BearerAuth: []
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties: {}
  *     responses:
  *       200:
  *         description: Đăng xuất thành công
@@ -166,6 +173,14 @@ router.get('/me', protect, getMe);
  *             example:
  *               success: true
  *               message: "Đăng xuất thành công"
+ *       401:
+ *         description: Không có token hoặc token sai
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Token không hợp lệ hoặc đã hết hạn"
+ *               errorcode: "TOKEN_INVALID"
  *       500:
  *         description: Lỗi hệ thống
  */

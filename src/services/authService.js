@@ -50,7 +50,7 @@ export const loginUser = async ({ email, password }) => {
 
   // Lưu refresh token vào DB
   await User.findByIdAndUpdate(user._id, {
-    refreshTokens: tokens.refreshToken,
+    refreshToken: tokens.refreshToken,
   });
 
   // Trả về thông tin người dùng + token
@@ -83,8 +83,8 @@ export const refreshTokenProcess = async (refreshTokenFromCookie) => {
   }
 
   // Kiểm tra refresh token có khớp với DB không
-  const user = await User.findById(decoded.id).select("+refreshTokens");
-  if (!user || user.refreshTokens !== refreshTokenFromCookie) {
+  const user = await User.findById(decoded.id).select("+refreshToken");
+  if (!user || user.refreshToken !== refreshTokenFromCookie) {
     throw new Error("Refresh token không hợp lệ");
   }
 
@@ -103,10 +103,9 @@ export const refreshTokenProcess = async (refreshTokenFromCookie) => {
 };
 // 3. Đăng xuất
 export const logoutUser = async (userId) => {
- try {
-    // Xóa token khỏi cookie
-     await User.findByIdAndUpdate(userId, { refreshTokens: null });
-    return successResponse(res, 'Đăng xuất thành công');
+  try {
+    await User.findByIdAndUpdate(userId, { refreshToken: null });
+    return { success: true };
   } catch (err) {
     throw new Error('LOGOUT_FAILED');
   }

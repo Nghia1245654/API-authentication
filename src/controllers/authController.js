@@ -47,6 +47,9 @@ export const refresh = async (req, res) => {
   try {
     // Lấy refresh token từ cookie
     const refreshTokenFromCookie = req.cookies.refreshToken;
+    
+    console.log('🍪 Cookies received:', req.cookies);
+    console.log('🔑 Refresh token from cookie:', refreshTokenFromCookie);
 
     // Gọi service để tạo access token mới
     const tokens = await authService.refreshTokenProcess(refreshTokenFromCookie);
@@ -57,6 +60,7 @@ export const refresh = async (req, res) => {
     });
 
   } catch (error) {
+    console.log('❌ Refresh token error:', error.message);
     res.status(401).json({ message: error.message });
   }
 };
@@ -76,7 +80,7 @@ export const logout = async (req, res) => {
      if (req.user) await authService.logoutUser(req.user.id);
     // Xóa cookie refreshToken
     res.clearCookie('refreshToken');
-    return successResponse(res, 'Đăng xuất thành công');
+    return successResponse(res, null, 'Đăng xuất thành công');
   } catch (err) {
     return errorResponse(res, 'Lỗi hệ thống', 500, err.message);
   }
