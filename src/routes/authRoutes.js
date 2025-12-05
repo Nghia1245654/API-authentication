@@ -6,164 +6,146 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/auth/register:
+ * tags:
+ *   name: Auth
+ *   description: API xác thực người dùng
+ */
+
+/**
+ * @swagger
+ * /auth/register:
  *   post:
- *     summary: Đăng ký người dùng mới
- *     tags: [Authentication]
+ *     tags: [Auth]
+ *     summary: Đăng ký tài khoản mới
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *               - name
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: user@example.com
- *               password:
- *                 type: string
- *                 minLength: 6
- *                 example: password123
- *               name:
- *                 type: string
- *                 example: John Doe
+ *             $ref: "#/components/schemas/RegisterRequest"
  *     responses:
  *       201:
  *         description: Đăng ký thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/User"
  *       400:
- *         description: EMAIL_ALREADY_REGISTERED
+ *         description: Email đã đăng ký
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *               $ref: "#/components/schemas/ErrorResponse"
+ *             example:
+ *               success: false
+ *               message: "Email đã được đăng ký"
+ *               errorcode: "EMAIL_ALREADY_REGISTERED"
  *       500:
- *         description: REGISTER_FAILED
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         description: Lỗi hệ thống
  */
 router.post('/register', register);
 
+
 /**
  * @swagger
- * /api/auth/login:
+ * /auth/login:
  *   post:
+ *     tags: [Auth]
  *     summary: Đăng nhập người dùng
- *     tags: [Authentication]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 example: user@example.com
- *               password:
- *                 type: string
- *                 example: password123
+ *             $ref: "#/components/schemas/LoginRequest"
  *     responses:
  *       200:
  *         description: Đăng nhập thành công
+ *         content:
+ *           application/json:
+ *             example:
+ *               accessToken: "jwt_token"
+ *               user:
+ *                 _id: "123"
+ *                 email: "test@gmail.com"
+ *                 name: "User A"
  *       401:
- *         description: INVALID_CREDENTIALS
+ *         description: Sai mật khẩu hoặc tài khoản
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               success: false
+ *               message: "Sai mật khẩu hoặc tài khoản"
+ *               errorcode: "INVALID_CREDENTIALS"
  *       500:
- *         description: LOGIN_FAILED
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         description: Lỗi hệ thống
  */
 router.post('/login', login);
 
+
 /**
  * @swagger
- * /api/auth/refresh-token:
+ * /auth/refresh-token:
  *   post:
- *     summary: Làm mới access token
- *     tags: [Authentication]
+ *     tags: [Auth]
+ *     summary: Lấy access token mới từ refresh token (cookie)
  *     responses:
  *       200:
- *         description: Làm mới token thành công
+ *         description: Tạo token mới thành công
+ *         content:
+ *           application/json:
+ *             example:
+ *               message: "Lấy token mới thành công"
+ *               accessToken: "new_access_token"
  *       401:
- *         description: REFRESH_TOKEN_INVALID
+ *         description: Refresh token không hợp lệ
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: REFRESH_TOKEN_FAILED
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               message: "INVALID_REFRESH_TOKEN"
  */
 router.post('/refresh-token', refresh);
 
-/**
- * @swagger
- * /api/auth/me:
- *   get:
- *     summary: Lấy thông tin người dùng hiện tại
- *     tags: [Authentication]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Lấy thông tin thành công
- *       401:
- *         description: TOKEN_INVALID
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- *       500:
- *         description: GET_USER_INFO_FAILED
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
- */
-router.get('/me', protect, getMe);
 
 /**
  * @swagger
- * /api/auth/logout:
- *   post:
- *     summary: Đăng xuất người dùng
- *     tags: [Authentication]
+ * /auth/me:
+ *   get:
+ *     tags: [Auth]
+ *     summary: Lấy thông tin người dùng hiện tại
  *     security:
- *       - bearerAuth: []
+ *       - BearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lấy thông tin thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/User"
+ *       401:
+ *         description: Không có token hoặc token sai
+ */
+router.get('/me', protect, getMe);
+
+
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Đăng xuất người dùng (xóa refresh token cookie)
+ *     security:
+ *       - BearerAuth: []
  *     responses:
  *       200:
  *         description: Đăng xuất thành công
- *       401:
- *         description: NOT_AUTHORIZED
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               success: true
+ *               message: "Đăng xuất thành công"
  *       500:
- *         description: LOGOUT_FAILED
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         description: Lỗi hệ thống
  */
 router.post('/logout', protect, logout);
 
