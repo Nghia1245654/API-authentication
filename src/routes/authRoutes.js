@@ -115,6 +115,14 @@ router.post('/refresh-token', refresh);
  *     summary: Lấy thông tin người dùng hiện tại
  *     security:
  *       - BearerAuth: []
+ *     parameters:
+ *       - in: header
+ *         name: Authorization
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *         description: "JWT Access Token với format: Bearer <token>"
  *     responses:
  *       200:
  *         description: Lấy thông tin thành công
@@ -122,8 +130,22 @@ router.post('/refresh-token', refresh);
  *           application/json:
  *             schema:
  *               $ref: "#/components/schemas/User"
+ *             example:
+ *               success: true
+ *               message: "Lấy thông tin thành công"
+ *               data:
+ *                 _id: "123"
+ *                 email: "user@example.com"
+ *                 name: "John Doe"
+ *                 role: "user"
  *       401:
  *         description: Không có token hoặc token sai
+ *         content:
+ *           application/json:
+ *             example:
+ *               success: false
+ *               message: "Token không hợp lệ hoặc đã hết hạn"
+ *               errorcode: "TOKEN_INVALID"
  */
 router.get('/me', protect, getMe);
 
