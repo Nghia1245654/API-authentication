@@ -6,16 +6,9 @@ const router = express.Router();
 
 /**
  * @swagger
- * tags:
- *   name: Authentication
- *   description: User authentication management
- */
-
-/**
- * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Register a new user
+ *     summary: Đăng ký người dùng mới
  *     tags: [Authentication]
  *     requestBody:
  *       required: true
@@ -41,57 +34,27 @@ const router = express.Router();
  *                 example: John Doe
  *     responses:
  *       201:
- *         description: User registered successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Đăng ký thành công
- *                 data:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     email:
- *                       type: string
- *                     name:
- *                       type: string
- *                     role:
- *                       type: string
- *                       example: user
+ *         description: Đăng ký thành công
  *       400:
- *         description: Email already exists or validation error
+ *         description: EMAIL_ALREADY_REGISTERED
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Email đã được đăng ký
- *                 errorcode:
- *                   type: string
- *                   example: EMAIL_ALREADY_REGISTERED
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: Internal server error
+ *         description: REGISTER_FAILED
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-// Public Routes (Ai cũng gọi được)
 router.post('/register', register);
 
 /**
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Login user
+ *     summary: Đăng nhập người dùng
  *     tags: [Authentication]
  *     requestBody:
  *       required: true
@@ -112,45 +75,19 @@ router.post('/register', register);
  *                 example: password123
  *     responses:
  *       200:
- *         description: Login successful
- *         headers:
- *           Set-Cookie:
- *             description: Refresh token stored in httpOnly cookie
- *             schema:
- *               type: string
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 accessToken:
- *                   type: string
- *                   description: JWT access token
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     email:
- *                       type: string
- *                     name:
- *                       type: string
+ *         description: Đăng nhập thành công
  *       401:
- *         description: Invalid credentials
+ *         description: INVALID_CREDENTIALS
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Sai mật khẩu hoặc tài khoản
- *                 errorcode:
- *                   type: string
- *                   example: INVALID_CREDENTIALS
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: LOGIN_FAILED
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/login', login);
 
@@ -158,128 +95,75 @@ router.post('/login', login);
  * @swagger
  * /api/auth/refresh-token:
  *   post:
- *     summary: Refresh access token
+ *     summary: Làm mới access token
  *     tags: [Authentication]
- *     description: Get a new access token using refresh token from httpOnly cookie
  *     responses:
  *       200:
- *         description: Token refreshed successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Lấy token mới thành công
- *                 accessToken:
- *                   type: string
- *                   description: New JWT access token
+ *         description: Làm mới token thành công
  *       401:
- *         description: Invalid or expired refresh token
+ *         description: REFRESH_TOKEN_INVALID
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: Refresh token không hợp lệ
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: REFRESH_TOKEN_FAILED
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/refresh-token', refresh); 
+router.post('/refresh-token', refresh);
 
 /**
  * @swagger
  * /api/auth/me:
  *   get:
- *     summary: Get current user profile
+ *     summary: Lấy thông tin người dùng hiện tại
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: User profile retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Lấy thông tin thành công
- *                 data:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                     email:
- *                       type: string
- *                     name:
- *                       type: string
- *                     role:
- *                       type: string
+ *         description: Lấy thông tin thành công
  *       401:
- *         description: Unauthorized - Invalid or missing token
+ *         description: TOKEN_INVALID
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Token không hợp lệ hoặc đã hết hạn
- *                 errorcode:
- *                   type: string
- *                   example: TOKEN_INVALID
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: GET_USER_INFO_FAILED
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
-// Private Routes (Phải có Token mới gọi được)
-// Dùng middleware protect chèn vào giữa
 router.get('/me', protect, getMe);
 
 /**
  * @swagger
  * /api/auth/logout:
  *   post:
- *     summary: Logout user
+ *     summary: Đăng xuất người dùng
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: Logout successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Đăng xuất thành công
+ *         description: Đăng xuất thành công
  *       401:
- *         description: Unauthorized - Invalid or missing token
+ *         description: NOT_AUTHORIZED
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 success:
- *                   type: boolean
- *                   example: false
- *                 message:
- *                   type: string
- *                   example: Bạn chưa đăng nhập
- *                 errorcode:
- *                   type: string
- *                   example: NOT_AUTHORIZED
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         description: LOGOUT_FAILED
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/logout', protect, logout);
 
