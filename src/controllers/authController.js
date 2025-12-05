@@ -69,7 +69,7 @@ export const refresh = async (req, res) => {
 export const getMe = async (req, res) => {
   try {
     const user = await authService.getMe(req.user);
-    return successResponse(res, 'Lấy thông tin thành công', user);
+    return successResponse(res, user, 'Lấy thông tin thành công');
   } catch (err) {
     return errorResponse(res, 'Lỗi hệ thống', 500, err.message);
   }
