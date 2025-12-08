@@ -48,6 +48,35 @@ const options = {
             password: { type: "string" }
           }
         },
+        Project: {
+  type: "object",
+  properties: {
+    name: { type: "string" },
+    description: { type: "string" },
+    status: { type: "string", enum: ["active", "inactive"] },
+    owner: { type: "string" },
+    createdAt: { type: "string" },
+    updatedAt: { type: "string" }
+  }
+},
+ProjectCreateRequest: {
+  type: "object",
+  required: ["name"],
+  properties: {
+    name: { type: "string" },
+    description: { type: "string" },
+    status: { type: "string" }
+  }
+},
+ProjectUpdateRequest: {
+  type: "object",
+  properties: {
+    name: { type: "string" },
+    description: { type: "string" },
+    status: { type: "string" }
+  }
+}
+,
         ErrorResponse: {
           type: "object",
           properties: {
