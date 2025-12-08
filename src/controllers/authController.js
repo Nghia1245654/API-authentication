@@ -1,6 +1,7 @@
 import * as authService from '../services/authService.js';
 import { successResponse, errorResponse } from '../utils/response.js';
 
+
 export const register = async (req, res) => {
   try {
     const newUser = await authService.registerUser(req.body); 
@@ -81,6 +82,42 @@ export const logout = async (req, res) => {
     // Xóa cookie refreshToken
     res.clearCookie('refreshToken');
     return successResponse(res, null, 'Đăng xuất thành công');
+  } catch (err) {
+    return errorResponse(res, 'Lỗi hệ thống', 500, err.message);
+  }
+};
+//hàm delete user
+export const deleteUser = async (req, res) => {
+  try {
+    
+    await authService.deleteUser(req.user.id);
+    
+    return successResponse(res, null, 'Xóa người dùng thành công');
+  } catch (err) {
+    return errorResponse(res, 'Lỗi hệ thống', 500, err.message);
+  }
+};
+//hàm update user
+export const updateUser = async (req, res) => {
+  try {
+    const updated = await authService.updateUser(
+      req.params.id,      // ID user cần update
+      req.user.id,        // ID người đang thao tác
+      req.user.role,      // Role của người thao tác
+      req.body            // Data cần update
+    );
+    return successResponse(res, 'Cập nhật người dùng thành công', updated);
+  } catch (err) {
+    if (err.message === 'FORBIDDEN') return errorResponse(res, 'Bạn không có quyền sửa người dùng này', 403, 'FORBIDDEN');
+    if (err.message === 'USER_NOT_FOUND') return errorResponse(res, 'Không tìm thấy người dùng', 404, 'USER_NOT_FOUND');
+    return errorResponse(res, 'Lỗi hệ thống', 500, err.message);
+  }
+};
+// hàm get all users
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await authService.getAllUsers();
+    return successResponse(res, 'Lấy tất cả người dùng thành công', users);
   } catch (err) {
     return errorResponse(res, 'Lỗi hệ thống', 500, err.message);
   }

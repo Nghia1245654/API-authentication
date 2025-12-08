@@ -4,6 +4,7 @@ import { swaggerDocs } from "./swagger.js";
 import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import authRoutes from './routes/authRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
 import cookieParser from 'cookie-parser'; 
 
 dotenv.config();
@@ -21,7 +22,7 @@ connectDB();
 
 // Routes
 app.use('/api/auth', authRoutes);
-
+app.use('/api/projects', projectRoutes);
 // Swagger docs
 swaggerDocs(app);
 

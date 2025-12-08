@@ -1,0 +1,36 @@
+// POST /api/projects
+// Tạo mới một dự án
+POST http://localhost:3001/api/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQyODhhMmI5NDEwY2E4NWIyNWQ4MyIsImlhdCI6MTc2NTEzNDA5MCwiZXhwIjoxNzY1MTM0OTkwfQ.Avc11i3WnMfDUuVH3vOyeX1i14dYN7l8w1Sc-QWk0_Q
+Content-Type: application/json
+
+{
+  "name": "Dự",
+  "description": "Mô tả dự án mới"
+}
+###
+// GET /api/projects
+// Lấy tất cả các dự án
+GET http://localhost:3001/api/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQyODhhMmI5NDEwY2E4NWIyNWQ4MyIsImlhdCI6MTc2NTEzMzg3OSwiZXhwIjoxNzY1MTM0Nzc5fQ.0ioXPR1jCJp5kmcL82oRbgiigl7ePufFnFX4bzHfGI4
+###
+// GET /api/projects/{id}
+// Lấy thông tin một dự án cụ thể
+GET http://localhost:3001/api/projects/6934288a2b9410ca85b25d83
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQyODhhMmI5NDEwY2E4NWIyNWQ4MyIsImlhdCI6MTc2NTEzMzg3OSwiZXhwIjoxNzY1MTM0Nzc5fQ.0ioXPR1jCJp5kmcL82oRbgiigl7ePufFnFX4bzHfGI4
+###
+// PUT /api/projects/{id}
+// Cập nhật thông tin một dự án cụ thể
+PUT http://localhost:3001/api/projects/6935cec2b1c181aba91d5f7e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQyODhhMmI5NDEwY2E4NWIyNWQ4MyIsImlhdCI6MTc2NTEzNDA5MCwiZXhwIjoxNzY1MTM0OTkwfQ.Avc11i3WnMfDUuVH3vOyeX1i14dYN7l8w1Sc-QWk0_Q
+Content-Type: application/json
+
+{
+  "name": "Dự án đã cập nhật",
+  "description": "Mô tả dự án đã cập nhật"
+}
+###
+// DELETE /api/projects/{id}
+// Xóa một dự án cụ thể
+DELETE http://localhost:3001/api/projects/6935cec2b1c181aba91d5f7e
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQyODhhMmI5NDEwY2E4NWIyNWQ4MyIsImlhdCI6MTc2NTEzNDA5MCwiZXhwIjoxNzY1MTM0OTkwfQ.Avc11i3WnMfDUuVH3vOyeX1i14dYN7l8w1Sc-QWk0_Q

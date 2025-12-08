@@ -5,7 +5,7 @@ Content-Type: application/json
 {
     "name": "kinglata04",
     "password": "123456",
-    "email": "king@gmail.com",
+    "email": "king9012@gmail.com",
     "role": "user"
 }
 
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
    "password": "123456",
-    "email": "king@gmail.com"
+    "email": "king9012@gmail.com"
 }
 
 ###
@@ -26,4 +26,25 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmVlZjE5N
 ###
 //logout
 POST http://localhost:3001/api/auth/logout
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmVlZjE5NzI3YmFmZTA4ZTMzZTNiMyIsImlhdCI6MTc2NDY4NDg4MywiZXhwIjoxNzY0NzcxMjgzfQ.KfKRvF9FwonhGtsbRpMxCXsR685-M5iiSXQJ1CUxcOo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzMxMjU1MTMxNjk0NDM4NDI4NTFkYSIsImlhdCI6MTc2NTAyNDkwNCwiZXhwIjoxNzY1MDI1ODA0fQ.k1X2PLFZ7fX5cX_FkEUS1lK7oohrlLFgaRvD3osIIJk
+###
+//xoa nguoi dung
+DELETE http://localhost:3001/api/auth/delete/69341b171b0ef2cbe29d5d11
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQxZTdlODJmODBlZTU3ZTYwNzVmYiIsImlhdCI6MTc2NTAyMzM2OSwiZXhwIjoxNzY1MDI0MjY5fQ.qTBdnDvCSRGP9UhPIpdaqYWh1SHKSYO4ar4FfF-2R8I
+###
+//cap nhat thong tin nguoi dung
+PUT http://localhost:3001/api/auth/update/693428692b9410ca85b25d80
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQyODhhMmI5NDEwY2E4NWIyNWQ4MyIsImlhdCI6MTc2NTAyNTk0MywiZXhwIjoxNzY1MDI2ODQzfQ.wAIkKjEkWcq67fb5cvK4gD2D_y6DAxnyB3UjB0JEmoo
+Content-Type: application/json
+
+{
+    "name": "kingla",
+    "password": "1234567",
+    "email": "king90@gmail.com",
+    "role": "user"
+}
+###
+//lay tat ca nguoi dung (getAllUsers)
+GET http://localhost:3001/api/auth/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQyODhhMmI5NDEwY2E4NWIyNWQ4MyIsImlhdCI6MTc2NTEyNDU3MywiZXhwIjoxNzY1MTI1NDczfQ.H0mnxeJuEIt3eUFrybp8TN5Pb6fBNaenLs3IXWtlxbU
+

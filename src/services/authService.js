@@ -1,3 +1,4 @@
+import { authorize } from '../middleware/authMiddleware.js';
 import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 
@@ -18,14 +19,14 @@ const generateTokens = (userId) => {
 
 
 // 1. Đăng ký
-export const registerUser = async ({ email, password, name }) => {
+export const registerUser = async ({ email, password, name ,role}) => {
   const userExists = await User.findOne({ email });
   if (userExists) {
     throw new Error('EMAIL_EXIST');
   }
 
   // Model sẽ tự động hash password nhờ pre('save')
-  const newUser = await User.create({ email, password, name });
+  const newUser = await User.create({ email, password, name ,role});
 
   return newUser;
 };
@@ -112,4 +113,71 @@ export const logoutUser = async (userId) => {
 };
 export const getMe = async (user) => {
   return user;
+};
+//delete user
+export const deleteUser = async (userId) => {
+  try {
+    // nếu user id ko tồn tại thì throw error
+    if (!userId) {
+      throw new Error('USER_NOT_FOUND');
+    }
+    await User.findByIdAndDelete(userId);
+    return { success: true };
+  } catch (err) {
+    throw new Error('DELETE_USER_FAILED');
+  }
+};
+//updateUser
+export const updateUser = async (targetUserId, currentUserId, currentUserRole, data) => {
+  // Tìm user cần update
+  const user = await User.findById(targetUserId);
+  
+  if (!user) throw new Error('USER_NOT_FOUND');
+
+  // CHECK QUYỀN:
+  // 1. User tự update chính mình: OK
+  // 2. Admin update bất kỳ ai: OK
+  // 3. User update người khác: FORBIDDEN
+  const isSelf = targetUserId === currentUserId;
+  const isAdmin = currentUserRole === 'admin';
+
+  if (!isSelf && !isAdmin) {
+    throw new Error('FORBIDDEN'); // Không có quyền
+  }
+
+  // Hash password nếu có trong data
+  if (data.password) {
+    const bcrypt = await import('bcryptjs');
+    const salt = await bcrypt.genSalt(10);
+    data.password = await bcrypt.hash(data.password, salt);
+  }
+
+  // Chỉ cho phép update các field: name, email, role, password
+  const allowedUpdates = {};
+  if (data.name) allowedUpdates.name = data.name;
+  if (data.email) allowedUpdates.email = data.email;
+  if (data.password) allowedUpdates.password = data.password;
+  
+  // Chỉ admin mới được đổi role
+  if (data.role) {
+    allowedUpdates.role = data.role;
+  }
+
+  // Cập nhật user với ID đúng và data object đúng
+  const updatedUser = await User.findByIdAndUpdate(
+    targetUserId,  // ID của user cần update
+    allowedUpdates, // Object chứa data update
+    { new: true, runValidators: true }
+  ).select('-password -refreshToken');
+  
+  return updatedUser;
+};
+//get all users
+export const getAllUsers = async () => {
+  try {
+    const users = await User.find().select('-password -refreshToken');
+    return users;
+  } catch (err) {
+    throw new Error('GET_ALL_USERS_FAILED');
+  }
 };
