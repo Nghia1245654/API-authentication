@@ -1,10 +1,10 @@
 import Project from '../models/projectModel.js';
 
-// 1. Tạo Project (Tự động lấy ID người đang login làm owner)
+// 1. Tạo Project (Lấy ID người được set làm owner)
 export const createProject = async (data, userId) => {
   // data gồm name, description...
   // Gán thêm owner vào data
-  return await Project.create({ ...data, owner: userId });
+  return await Project.create({ ...data, ownerId});
 };
 
 // 2. Cập nhật Project (Có check quyền)
